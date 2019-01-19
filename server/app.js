@@ -17,7 +17,7 @@ mongoose.connection.once('open', ()=> { // on success callback func()
 
 app.use( '/graphql', // Respond to requests to localhost:PORT/graphql
   graphqlHTTP({
-    schema,
+    schema, //  This schema defines the graph and obj types on the graph - Not the Mongo schema
     graphiql: true // allow/activate graphiql interface
   })
 );
