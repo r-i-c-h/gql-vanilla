@@ -69,25 +69,36 @@ const AuthorType = new GraphQLObjectType({
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*** Define All Queries Within RootQuery ***/
 const RootQuery = new GraphQLObjectType({
-  name: 'RootQUeryType',
+  name: 'RootQueryType',
   fields: {
-    book: {
-      // "book" = Name of query
+    book: { // "book" = Name of query
       // expect request to be `book(id:'123'){ /*....*/ }
       type: BookType, // Expected return type
       args: { id: { type: GraphQLID } }, // Expected Arguments
-      /*** HOW to Get the Data from the 'book' query ***/
+  /*** HOW to Get the Data from the 'book' query ***/
       resolve(parent, args) {
         const ans = bookz.filter(x => x.id === args.id);
         return ans[0]; // gQL wants an Obj{} response, not Arr[]
       }
     },
-    author: {
-      type: AuthorType,
+    author: { // "author" query
+      type: AuthorType, // return an AuthorType as defined above
       args: { id: { type: GraphQLID } }, // Expected Arguments
       resolve(parent, args) {
-        const ans = authorz.filter(x => x.id === args.id);
+        const ans = authorz.filter(writer => writer.id === args.id);
         return ans[0];
+      }
+    },
+    books: { // SELECT ALL
+      type: new GraphQLList(BookType),
+      resolve(parent,args){
+        return bookz;
+      }
+    },
+    authors: { // SELECT ALL
+      type: new GraphQLList(AuthorType),
+      resolve(parent,args){
+        return authorz;
       }
     }
   }
