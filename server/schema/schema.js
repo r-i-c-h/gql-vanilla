@@ -1,9 +1,16 @@
+/* eslint-disable */
 // Define Relationships Between Types
 const graphql = require('graphql');
-
-const { GraphQLID, GraphQLObjectType, GraphQLSchema, GraphQLString, GraphQLInt } = graphql;
-
-//dummy Data
+const {
+  GraphQLID,
+  GraphQLInt,
+  GraphQLList,
+  GraphQLObjectType,
+  GraphQLSchema,
+  GraphQLString
+} = graphql;
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+//Dummy Data
 var bookz = [
   { name: 'Name of the Wind', genre: 'Fantasy', id: '1', authorId: '1' },
   { name: 'The Final Empire', genre: 'Fantasy', id: '2', authorId: '2' },
@@ -18,7 +25,7 @@ var authorz = [
   { name: 'Brandon Sanderson', age: 42, id: '2' },
   { name: 'Terry Pratchett', age: 66, id: '3' }
 ];
-
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*** Describe Object Types & Relationships ***/
 const BookType = new GraphQLObjectType({
   name: 'Book',
@@ -41,16 +48,26 @@ const BookType = new GraphQLObjectType({
     }
   })
 });
+
 const AuthorType = new GraphQLObjectType({
   name: 'Author',
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
-    age: { type: GraphQLInt }
+    age: { type: GraphQLInt },
+    books: {
+      type: new GraphQLList(BookType), /** Many to One Relationship **/
+      resolve(parent, args) {
+        return bookz.filter(book => {
+          if (book.authorId === parent.id) return book;
+        });
+      }
+    }
   })
 });
 
-/*** Define Queries ***/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*** Define All Queries Within RootQuery ***/
 const RootQuery = new GraphQLObjectType({
   name: 'RootQUeryType',
   fields: {
@@ -76,6 +93,5 @@ const RootQuery = new GraphQLObjectType({
   }
 });
 
-module.exports = new GraphQLSchema({
-  query: RootQuery
-});
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+module.exports = new GraphQLSchema({ query: RootQuery });
