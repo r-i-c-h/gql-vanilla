@@ -22,5 +22,16 @@ const getAuthorsQuery = gql`
   }
 `
 
+// ACCEPTS VARIABLES FOR THE MUTATION from <NewBookForm />
+// Put vars in mutation($someVariable:String)
+// The name=$name thing is just convention
+const addBookMutation = gql`
+    mutation AddBook($name: String!, $genre: String!, $authorId: ID!){
+        addNewBook(name: $name, genre: $genre, authorId: $authorId){
+            name
+            id
+        }
+    }
+`;
 
-export { getBooksQuery, getAuthorsQuery };
+export { getBooksQuery, getAuthorsQuery, addBookMutation };

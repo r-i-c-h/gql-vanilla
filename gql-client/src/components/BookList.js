@@ -6,11 +6,11 @@ import Book from './Book';
 class BookList extends Component {
   renderDataFromGQL = () => {
     const data = this.props.data
-    console.log(data);
 
     if (data.loading) {
       return (<div>Loading...</div>);
     }
+    if (!data.books){ return <div className="error-message">I'm Sorry Dave. Something is wrong.</div> }
     return data.books.map(x => <Book bookData={x} key={x.id} />)
   }
   render() {
