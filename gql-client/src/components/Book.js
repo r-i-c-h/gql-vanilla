@@ -1,15 +1,16 @@
 import React from 'react';
 
-const Book = ({bookData}) => {
+const Book = ({bookData, selectBook}) => {
+  const handleClick = () =>{
+    selectBook(bookData.id);
+  }
+
   return (
-    <li>
-      <p>
-      <span className="book-detail--title"> {bookData.name} </span> - by
-      <span className="book-detail--author"> {bookData.author.name} </span>
-      (<span className="book-detail--genre">{bookData.genre}</span>)
-      </p>
+    <li onClick={handleClick}>
+      <span className="book-list__list--title"> {bookData.name} </span> -
+      (<span className="book-list__list--genre">{bookData.genre}</span>)
     </li>
   )
 }
 
-  export default Book;
+export default Book;
